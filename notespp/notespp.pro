@@ -1,10 +1,18 @@
-QT -= gui
+#-------------------------------------------------
+#
+# Project created by QtCreator 2018-11-14T15:14:43
+#
+#-------------------------------------------------
 
-CONFIG += c++11 console
-CONFIG -= app_bundle
+QT       -= gui
+
+TARGET = notespp
+TEMPLATE = lib
+
+DEFINES += NOTESPP_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked deprecated (the exact warnings
+# any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -15,12 +23,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        status.cpp \
+    main.cpp \
+    server.cpp
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+HEADERS += \
+        status.h \
+        notespp_global.h \
+    main.h \
+    server.h
+
+unix {
+    target.path = /usr/lib
+    INSTALLS += target
+}
 
 # ===== ここまでQtコンソールアプリケーションの既定値 =====
 
@@ -61,20 +77,6 @@ win32 {
 
 # OS共通のリンクライブラリ
 LIBS += -lnotes
-
-DISTFILES += \
-    ncl.ja_JP.ts
-
-RESOURCES += \
-    ncl.qrc
-
-# notespp
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../notespp/release/
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../notespp/debug/
-else:unix: LIBS += -L$$OUT_PWD/../notespp/
-LIBS += -lnotespp0
-INCLUDEPATH += $$PWD/../notespp
-DEPENDPATH += $$PWD/../notespp
 
 # rxcpp
 INCLUDEPATH += C:/Users/tkond/Documents/WinAppProjects/RxCpp/Rx/v2/src
