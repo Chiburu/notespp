@@ -1,7 +1,7 @@
 ﻿#ifndef NOTESPP_MAIN_H
 #define NOTESPP_MAIN_H
 
-#include "notespp_global.h"
+#include <notespp/notespp_global.h>
 
 namespace notespp {
 

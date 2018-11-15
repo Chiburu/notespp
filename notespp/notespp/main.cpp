@@ -1,4 +1,4 @@
-﻿#include "main.h"
+﻿#include "notespp/main.h"
 
 namespace notespp {
 

@@ -1,7 +1,7 @@
 ﻿#ifndef NOTESPP_STATUS_H
 #define NOTESPP_STATUS_H
 
-#include "notespp_global.h"
+#include <notespp/notespp_global.h>
 
 namespace notespp {
 

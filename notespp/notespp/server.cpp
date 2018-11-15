@@ -1,5 +1,5 @@
-﻿#include "server.h"
-#include "status.h"
+﻿#include "notespp/server.h"
+#include "notespp/status.h"
 
 #include <QByteArray>
 
@@ -26,7 +26,7 @@ GetServerLatency::GetServerLatency(
 {}
 
 rx::observable<GetServerLatency::ReturnValues> GetServerLatency::operator ()(
-    const QByteArray &serverName,
+    const String &serverName,
     DWORD timeout
     )
 {

@@ -1,7 +1,7 @@
 ﻿#ifndef NOTESPP_SERVER_H
 #define NOTESPP_SERVER_H
 
-#include "notespp_global.h"
+#include <notespp/string.h>
 #include <rxcpp/rx.hpp>
 
 namespace rx {
@@ -70,7 +70,7 @@ public:
    * @return ReturnValuesを流すObservable
    */
   rx::observable<ReturnValues> operator ()(
-      const QByteArray &serverName,
+      const String &serverName,
       DWORD timeout = 0
       );
 

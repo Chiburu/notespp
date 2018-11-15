@@ -3,9 +3,10 @@
 #include <QLocale>
 #include <QTextStream>
 
-#include <main.h>
-#include <server.h>
-#include <status.h>
+#include <notespp/main.h>
+#include <notespp/server.h>
+#include <notespp/status.h>
+#include <notespp/string.h>
 namespace nx {
 using namespace notespp;
 }
@@ -13,7 +14,7 @@ using namespace notespp;
 int main(int argc, char *argv[])
 {
   // 自身で到達させたいサーバ名を設定する。
-  const char *pServer = "Your/Server/Name";
+  const QString serverName("izanami");
 
   QCoreApplication app(argc, argv);
 
@@ -26,11 +27,11 @@ int main(int argc, char *argv[])
 
   // notesppからAPI関数を実行する。
   nx::GetServerLatency getServerLatency(true, true, true);
-  getServerLatency(pServer, 0).subscribe(
-        [&pServer](nx::GetServerLatency::ReturnValues values) {
+  getServerLatency(nx::String::fromQString(serverName), 0).subscribe(
+        [&serverName](nx::GetServerLatency::ReturnValues values) {
     // 標準出力
     QTextStream out(stdout, QIODevice::WriteOnly);
-    out << QObject::tr("Build version of '%1'").arg(pServer)
+    out << QObject::tr("Build version of '%1'").arg(serverName)
         << ": "
         << values.version_
         << endl
@@ -48,11 +49,17 @@ int main(int argc, char *argv[])
     catch (nx::Status status) {
       // 標準エラー出力
       QTextStream out(stderr, QIODevice::WriteOnly);
+      nx::String text(status.what());
       out << QObject::tr("NSFGetServerLatency status")
           << ": "
-          << status.error()
+          << text.toQString()
           << endl;
     }
+  }
+  , []() {
+    // 標準出力
+    QTextStream out(stdout, QIODevice::WriteOnly);
+    out << "Completed." << endl;
   });
 
   return 0;
