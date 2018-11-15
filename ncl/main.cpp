@@ -14,7 +14,7 @@ using namespace notespp;
 int main(int argc, char *argv[])
 {
   // 自身で到達させたいサーバ名を設定する。
-  const QString serverName("izanami");
+  const QString serverName("Your/Server/Name");
 
   QCoreApplication app(argc, argv);
 
