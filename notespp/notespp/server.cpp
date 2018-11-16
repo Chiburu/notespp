@@ -20,10 +20,9 @@ GetServerLatency::GetServerLatency(
     bool enableClientToServer,
     bool enableServerToClient
     )
-  : version_(0, enableVersion)
-  , clientToServer_(0, enableClientToServer)
-  , serverToClient_(0, enableServerToClient)
-{}
+  : values_(enableVersion, enableClientToServer, enableServerToClient)
+{
+}
 
 rx::observable<GetServerLatency::ReturnValues> GetServerLatency::operator ()(
     const String &serverName,
@@ -36,17 +35,13 @@ rx::observable<GetServerLatency::ReturnValues> GetServerLatency::operator ()(
       Status status = NSFGetServerLatency(
             const_cast<char*>(serverName.constData()),
             timeout,
-            clientToServer_.pValue(),
-            serverToClient_.pValue(),
-            version_.pValue()
+            values_.clientToServer().pValue(),
+            values_.serverToClient().pValue(),
+            values_.version().pValue()
             );
       if (status.hasError())
         throw status;
-      GetServerLatency::ReturnValues values;
-      values.version_ = version_.value();
-      values.clientToServer_ = clientToServer_.value();
-      values.serverToClient_ = serverToClient_.value();
-      o.on_next(values);
+      o.on_next(values_);
       o.on_completed();
     }
     catch (...) {

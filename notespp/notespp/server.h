@@ -24,16 +24,17 @@ public:
    * @tparam T データ型
    */
   template <typename T>
-  class InnerValue
+  class Value
   {
   public:
-    InnerValue(const T &value, bool enabled)
+    Value(const T &value, bool enabled)
       : value_(value)
       , enabled_(enabled)
     {}
 
     T *pValue() { return (enabled_) ? &value_ : nullptr; }
     T value() const { return value_; }
+    bool enabled() const { return enabled_; }
 
   private:
     T value_;
@@ -41,14 +42,30 @@ public:
   };
 
   /**
-   * @brief 出力用データ型
-   * @struct ReturnValues
+   * @brief 出力用データクラス
+   * @class ReturnValues
    */
-  struct ReturnValues
+  class ReturnValues
   {
-    WORD version_;
-    DWORD clientToServer_;
-    DWORD serverToClient_;
+  public:
+    ReturnValues(
+        bool enableVersion,
+        bool enableClientToServer,
+        bool enableServerToClient
+        )
+      : version_(0, enableVersion),
+        clientToServer_(0, enableClientToServer),
+        serverToClient_(0, enableServerToClient)
+    {}
+
+    Value<WORD> &version() { return version_; }
+    Value<DWORD> &clientToServer() { return clientToServer_; }
+    Value<DWORD> &serverToClient() { return serverToClient_; }
+
+  private:
+    Value<WORD> version_;
+    Value<DWORD> clientToServer_;
+    Value<DWORD> serverToClient_;
   };
 
   /**
@@ -75,9 +92,7 @@ public:
       );
 
 private:
-  InnerValue<WORD> version_;
-  InnerValue<DWORD> clientToServer_;
-  InnerValue<DWORD> serverToClient_;
+  ReturnValues values_;
 };
 
 } // namespace notespp

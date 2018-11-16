@@ -3,7 +3,11 @@ Notes C APIのC++/Qtによるラッピングライブラリと改訂版Notes Com
 
 # History
 
-* v0.0.3
+* v0.0.4
+
+  NSFGetServerLatency関数オブジェクトを改良して、Enableにした値かどうか、戻り値でもわかるようにします。
+
+* v0.0.3 - 2018-11-15
 
   * LMBCS文字列を扱うクラス String を追加します。
   * LMBCS文字列とQStringを相互に変換する機能を追加します。

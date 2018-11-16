@@ -26,23 +26,26 @@ int main(int argc, char *argv[])
   nx::Main notesMain(argc, argv);
 
   // notesppからAPI関数を実行する。
-  nx::GetServerLatency getServerLatency(true, true, true);
+  nx::GetServerLatency getServerLatency(false, false, true);
   getServerLatency(nx::String::fromQString(serverName), 0).subscribe(
         [&serverName](nx::GetServerLatency::ReturnValues values) {
     // 標準出力
     QTextStream out(stdout, QIODevice::WriteOnly);
-    out << QObject::tr("Build version of '%1'").arg(serverName)
-        << ": "
-        << values.version_
-        << endl
-        << QObject::tr("Latency time for client to server")
-        << ": "
-        << QString("%1 ms").arg(values.clientToServer_)
-        << endl
-        << QObject::tr("Latency time for server to client")
-        << ": "
-        << QString("%1 ms").arg(values.serverToClient_)
-        << endl;
+    if (values.version().enabled())
+      out << QObject::tr("Build version of '%1'").arg(serverName)
+          << ": "
+          << values.version().value()
+          << endl;
+    if (values.clientToServer().enabled())
+      out << QObject::tr("Latency time for client to server")
+          << ": "
+          << QString("%1 ms").arg(values.clientToServer().value())
+          << endl;
+    if (values.serverToClient().enabled())
+      out << QObject::tr("Latency time for server to client")
+          << ": "
+          << QString("%1 ms").arg(values.serverToClient().value())
+          << endl;
   }
   , [](std::exception_ptr ep) {
     try {std::rethrow_exception(ep);}

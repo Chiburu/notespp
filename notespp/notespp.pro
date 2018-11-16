@@ -43,12 +43,12 @@ unix {
 # ===== ここまでQtコンソールアプリケーションの既定値 =====
 
 # アプリケーション説明
-QMAKE_TARGET_PRODUCT = Notes Commandline
-QMAKE_TARGET_DESCRIPTION = Notes Commandline Tool
-QMAKE_TARGET_COPYRIGHT = (c) Chiburu Systems
+QMAKE_TARGET_PRODUCT = Notes Cpp Library
+QMAKE_TARGET_DESCRIPTION = Notes Cpp Library
+QMAKE_TARGET_COPYRIGHT = (c) 2018 Chiburu Systems
 
 # バージョン設定
-VERSION = 0.0.2
+VERSION = 0.0.4
 
 # 翻訳ファイル
 TRANSLATIONS += ncl.ja_JP.ts
