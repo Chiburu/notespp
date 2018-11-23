@@ -3,20 +3,33 @@
 #include <QLocale>
 #include <QTextStream>
 
+#include "commandlineparser.h"
+#include "getserverlatencycmd.h"
+#include "servernameoption.h"
+#include "timeoutoption.h"
+#include "returnvaluesoption.h"
+
 #include <notespp/main.h>
-#include <notespp/server.h>
 #include <notespp/status.h>
 #include <notespp/string.h>
 namespace nx {
 using namespace notespp;
 }
 
+#define EVALUATE(f,x) f(x)
+#define TO_STR_HELPER(s) #s
+#define TO_STR(s) QString(EVALUATE(TO_STR_HELPER, s)).split("+").join(" ")
+
 int main(int argc, char *argv[])
 {
   // 自身で到達させたいサーバ名を設定する。
-  const QString serverName("Your/Server/Name");
+//  const QString serverName("Your/Server/Name");
 
   QCoreApplication app(argc, argv);
+  app.setApplicationName(TO_STR(PROJECT_PRODUCT));
+  app.setApplicationVersion(TO_STR(PROJECT_VERSION));
+  app.setOrganizationDomain(TO_STR(PROJECT_DOMAIN));
+  app.setOrganizationName(TO_STR(PROJECT_COMPANY));
 
   QTranslator translator;
   translator.load(QLocale(), "ncl", ".", ":/translations", ".qm");
@@ -25,44 +38,27 @@ int main(int argc, char *argv[])
   // Notes C APIを初期化する。
   nx::Main notesMain(argc, argv);
 
-  // notesppからAPI関数を実行する。
-  nx::GetServerLatency getServerLatency(false, false, true);
-  getServerLatency(nx::String::fromQString(serverName), 0).subscribe(
-        [&serverName](nx::GetServerLatency::ReturnValues values) {
-    // 標準出力
-    QTextStream out(stdout, QIODevice::WriteOnly);
-    if (values.version().enabled())
-      out << QObject::tr("Build version of '%1'").arg(serverName)
-          << ": "
-          << values.version().value()
-          << endl;
-    if (values.clientToServer().enabled())
-      out << QObject::tr("Latency time for client to server")
-          << ": "
-          << QString("%1 ms").arg(values.clientToServer().value())
-          << endl;
-    if (values.serverToClient().enabled())
-      out << QObject::tr("Latency time for server to client")
-          << ": "
-          << QString("%1 ms").arg(values.serverToClient().value())
-          << endl;
-  }
-  , [](std::exception_ptr ep) {
-    try {std::rethrow_exception(ep);}
-    catch (nx::Status status) {
-      // 標準エラー出力
-      QTextStream out(stderr, QIODevice::WriteOnly);
-      nx::String text(status.what());
-      out << QObject::tr("NSFGetServerLatency status")
-          << ": "
-          << text.toQString()
-          << endl;
+  CommandLineParser cmdParser;
+  cmdParser.addCommand(new GetServerLatencyCmd());
+  cmdParser.addOption(new ServerNameOption());
+  cmdParser.addOption(new TimeoutOption());
+  cmdParser.addOption(new ReturnValuesOption());
+  cmdParser.parse(app).subscribe(
+        [](QStringList lines) {
+    QTextStream cout(stdout, QIODevice::WriteOnly);
+    foreach (QString line, lines) {
+      cout << line << endl;
     }
-  }
-  , []() {
-    // 標準出力
-    QTextStream out(stdout, QIODevice::WriteOnly);
-    out << "Completed." << endl;
+  }, [](std::exception_ptr ep) {
+    try {
+      std::rethrow_exception(ep);
+    } catch (nx::Status status) {
+      QTextStream cerr(stderr, QIODevice::WriteOnly);
+      cerr << nx::String(status.what()).toQString() << endl;
+    } catch (std::exception e) {
+      QTextStream cerr(stderr, QIODevice::WriteOnly);
+      cerr << e.what() << endl;
+    }
   });
 
   return 0;

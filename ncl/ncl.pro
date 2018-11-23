@@ -15,7 +15,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    commandlineparser.cpp \
+    command.cpp \
+    cmdoption.cpp \
+    getserverlatencycmd.cpp \
+    servernameoption.cpp \
+    timeoutoption.cpp \
+    returnvaluesoption.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -27,10 +34,22 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # アプリケーション説明
 QMAKE_TARGET_PRODUCT = Notes Commandline
 QMAKE_TARGET_DESCRIPTION = Notes Commandline Tool
+QMAKE_TARGET_COMPANY = Chiburu Systems
 QMAKE_TARGET_COPYRIGHT = (c) 2018 Chiburu Systems
 
 # バージョン設定
-VERSION = 0.0.4
+VERSION = 0.0.5
+
+VERSIONS = $$split(VERSION, ".")
+VER_MAJ = $$member(VERSIONS, 0)
+VER_MIN = $$member(VERSIONS, 1)
+VER_PAT = $$member(VERSIONS, 2)
+
+# for QCoreApplication Properties
+DEFINES += PROJECT_PRODUCT=$$join(QMAKE_TARGET_PRODUCT, +)
+DEFINES += PROJECT_COMPANY=$$join(QMAKE_TARGET_COMPANY, +)
+DEFINES += PROJECT_DOMAIN=chiburu.com
+DEFINES += PROJECT_VERSION=$$VERSION
 
 # 翻訳ファイル
 TRANSLATIONS += ncl.ja_JP.ts
@@ -79,3 +98,12 @@ DEPENDPATH += $$PWD/../notespp
 # rxcpp
 INCLUDEPATH += C:/Users/tkond/Documents/WinAppProjects/RxCpp/Rx/v2/src
 DEPENDPATH += C:/Users/tkond/Documents/WinAppProjects/RxCpp/Rx/v2/src
+
+HEADERS += \
+    commandlineparser.h \
+    command.h \
+    cmdoption.h \
+    getserverlatencycmd.h \
+    servernameoption.h \
+    timeoutoption.h \
+    returnvaluesoption.h
