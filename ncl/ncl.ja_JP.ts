@@ -24,47 +24,54 @@
         <translation type="vanished">サーバからクライアントへの待ち時間</translation>
     </message>
     <message>
-        <location filename="commandlineparser.cpp" line="40"/>
+        <location filename="commandlineparser.cpp" line="39"/>
         <source>Command</source>
         <translation>コマンド</translation>
     </message>
     <message>
-        <location filename="getserverlatencycmd.cpp" line="21"/>
+        <location filename="commandlineparser.cpp" line="54"/>
+        <source>No Command.</source>
+        <translation>コマンドがありません。</translation>
+    </message>
+    <message>
+        <location filename="commandlineparser.cpp" line="63"/>
+        <source>Not found command.</source>
+        <translation>コマンドが見つかりません。</translation>
+    </message>
+    <message>
+        <location filename="getserverlatencycmd.cpp" line="25"/>
         <source>No server name.</source>
         <translation>サーバ名がありません。</translation>
     </message>
     <message>
-        <location filename="getserverlatencycmd.cpp" line="43"/>
+        <location filename="getserverlatencycmd.cpp" line="49"/>
         <source>No return values.</source>
         <translation>戻り値の指定がありません。</translation>
     </message>
     <message>
-        <location filename="getserverlatencycmd.cpp" line="53"/>
         <source>Build version: %1</source>
-        <translation>ビルドバージョン: %1</translation>
+        <translation type="vanished">ビルドバージョン: %1</translation>
     </message>
     <message>
-        <location filename="getserverlatencycmd.cpp" line="55"/>
         <source>Client to Server: %1</source>
-        <translation>クライアントからサーバへの待ち時間: %1</translation>
+        <translation type="vanished">クライアントからサーバへの待ち時間: %1</translation>
     </message>
     <message>
-        <location filename="getserverlatencycmd.cpp" line="58"/>
         <source>Server to Client: %1</source>
-        <translation>サーバからクライアントへの待ち時間: %1</translation>
+        <translation type="vanished">サーバからクライアントへの待ち時間: %1</translation>
     </message>
     <message>
-        <location filename="returnvaluesoption.cpp" line="9"/>
+        <location filename="returnvaluesoption.cpp" line="10"/>
         <source>Return value names.</source>
         <translation>戻り値の名前。</translation>
     </message>
     <message>
-        <location filename="servernameoption.cpp" line="7"/>
+        <location filename="servernameoption.cpp" line="10"/>
         <source>Server name.</source>
         <translation>サーバ名。</translation>
     </message>
     <message>
-        <location filename="timeoutoption.cpp" line="7"/>
+        <location filename="timeoutoption.cpp" line="10"/>
         <source>Timeout. [ms]</source>
         <translation>タイムアウト時間。[ms]</translation>
     </message>

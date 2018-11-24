@@ -25,15 +25,14 @@ void CommandLineParser::addOption(CmdOption *pOption)
   optionList_.append(pOption);
 }
 
-rx::observable<QStringList> CommandLineParser::parse(
+rx::observable<QVariantMap> CommandLineParser::parse(
     const QCoreApplication &app
     )
 {
-  return rx::observable<>::create<QStringList>(
-        [this, &app](rx::subscriber<QStringList> o) {
+  return rx::observable<>::create<ClData>(
+        [this, &app](rx::subscriber<ClData> o) {
     try {
       QCommandLineParser parser;
-
       parser.addHelpOption();
       parser.addVersionOption();
 
@@ -42,19 +41,32 @@ rx::observable<QStringList> CommandLineParser::parse(
         parser.addOption(*pOption->ptr());
       }
       parser.process(app);
-
+      QVariantMap options;
+      foreach (CmdOption *pOption, optionList_) {
+        const QCommandLineOption *ptr = pOption->ptr();
+        if (parser.isSet(*ptr)) {
+          QString value = parser.value(*ptr);
+          options.insert(pOption->name(), value);
+        }
+      }
       const QStringList args = parser.positionalArguments();
+      if (args.isEmpty())
+        throw QObject::tr("No Command.");
       foreach (Command *pCmd, cmdList_) {
         QString cmd = pCmd->name();
         if (cmd == args.at(0)) {
-          o.on_next(pCmd->exec(parser));
+          o.on_next(std::make_tuple(pCmd, options));
           o.on_completed();
           return;
         }
       }
-      throw std::exception("No Command.");
+      throw QObject::tr("Not found command.");
     } catch (...) {
       o.on_error(std::current_exception());
     }
+  }).flat_map([](ClData cldata) {
+    Command *pCmd = std::get<0>(cldata);
+    QVariantMap options = std::get<1>(cldata);
+    return pCmd->exec(options);
   });
 }

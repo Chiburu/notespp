@@ -2,6 +2,8 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QTextStream>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "commandlineparser.h"
 #include "getserverlatencycmd.h"
@@ -44,20 +46,32 @@ int main(int argc, char *argv[])
   cmdParser.addOption(new TimeoutOption());
   cmdParser.addOption(new ReturnValuesOption());
   cmdParser.parse(app).subscribe(
-        [](QStringList lines) {
+        [](QVariantMap retValues) {
+    QJsonDocument json;
+    json.setObject(QJsonObject::fromVariantMap(retValues));
     QTextStream cout(stdout, QIODevice::WriteOnly);
-    foreach (QString line, lines) {
-      cout << line << endl;
-    }
+    cout << json.toJson(QJsonDocument::Compact) << endl;
   }, [](std::exception_ptr ep) {
+    QTextStream cerr(stderr, QIODevice::WriteOnly);
     try {
       std::rethrow_exception(ep);
     } catch (nx::Status status) {
-      QTextStream cerr(stderr, QIODevice::WriteOnly);
-      cerr << nx::String(status.what()).toQString() << endl;
-    } catch (std::exception e) {
-      QTextStream cerr(stderr, QIODevice::WriteOnly);
-      cerr << e.what() << endl;
+      QJsonObject data {
+        { "error", nx::String(status.what()).toQString() }
+      };
+      QJsonDocument json;
+      json.setObject(data);
+      cerr << json.toJson(QJsonDocument::Compact) << endl;
+    } catch (QString e) {
+      QJsonObject data { {"error", e} };
+      QJsonDocument json;
+      json.setObject(data);
+      cerr << json.toJson(QJsonDocument::Compact) << endl;
+    } catch (std::exception ex) {
+      QJsonObject data { {"error", ex.what() } };
+      QJsonDocument json;
+      json.setObject(data);
+      cerr << json.toJson(QJsonDocument::Compact) << endl;
     }
   });
 

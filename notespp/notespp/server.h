@@ -58,6 +58,17 @@ public:
         serverToClient_(0, enableServerToClient)
     {}
 
+    void setValues(
+        bool enableVersion,
+        bool enableClientToServer,
+        bool enableServerToClient
+        )
+    {
+      version_ = Value<WORD>(0, enableVersion);
+      clientToServer_ = Value<DWORD>(0, enableClientToServer);
+      serverToClient_ = Value<DWORD>(0, enableServerToClient);
+    }
+
     Value<WORD> &version() { return version_; }
     Value<DWORD> &clientToServer() { return clientToServer_; }
     Value<DWORD> &serverToClient() { return serverToClient_; }
@@ -74,7 +85,19 @@ public:
    * @param enableClientToServer クライアントtoサーバを有効にする
    * @param enableServerToClient サーバtoクライアントを有効にする
    */
-  GetServerLatency(
+  explicit GetServerLatency(
+      bool enableVersion = true,
+      bool enableClientToServer = true,
+      bool enableServerToClient = true
+      );
+
+  /**
+   * @brief 有効値を設定する。
+   * @param enableVersion バージョン値取得の有無
+   * @param enableClientToServer クライアントtoサーバ待ち時間取得の有無
+   * @param enableServerToClient サーバtoクライアント待ち時間取得の有無
+   */
+  void setValues(
       bool enableVersion = true,
       bool enableClientToServer = true,
       bool enableServerToClient = true
@@ -93,6 +116,8 @@ public:
 
 private:
   ReturnValues values_;
+  String serverName_;
+  DWORD timeout_;
 };
 
 } // namespace notespp

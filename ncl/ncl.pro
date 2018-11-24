@@ -17,8 +17,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     commandlineparser.cpp \
-    command.cpp \
-    cmdoption.cpp \
     getserverlatencycmd.cpp \
     servernameoption.cpp \
     timeoutoption.cpp \

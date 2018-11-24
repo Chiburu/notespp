@@ -17,11 +17,13 @@ namespace notespp {
 
 String::String()
   : bytes_()
-{}
+{
+}
 
 String::String(const char *pData, int size)
   : bytes_(pData, size)
-{}
+{
+}
 
 QString String::toQString() const
 {
