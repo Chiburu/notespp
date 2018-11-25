@@ -36,7 +36,7 @@ QMAKE_TARGET_COMPANY = Chiburu Systems
 QMAKE_TARGET_COPYRIGHT = (c) 2018 Chiburu Systems
 
 # バージョン設定
-VERSION = 0.0.5
+VERSION = 0.0.6.1
 
 VERSIONS = $$split(VERSION, ".")
 VER_MAJ = $$member(VERSIONS, 0)

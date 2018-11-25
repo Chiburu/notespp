@@ -43,14 +43,9 @@ public:
   /**
    * @brief コマンドの実行
    * @param options オプションデータマップ
-   * @return オブザーバブルなQVariantMap
+   * @return 戻り値データマップ
    */
-  virtual rx::observable<QVariantMap> exec(
-      const QVariantMap &options
-      ) override;
-
-private:
-  nx::GetServerLatency getServerLatency_;
+  virtual QVariantMap exec(QVariantMap &&options) override;
 };
 
 #endif // GETSERVERLATENCYCMD_H

@@ -85,11 +85,18 @@ public:
    * @param enableClientToServer クライアントtoサーバを有効にする
    * @param enableServerToClient サーバtoクライアントを有効にする
    */
-  explicit GetServerLatency(
+  GetServerLatency(
       bool enableVersion = true,
       bool enableClientToServer = true,
       bool enableServerToClient = true
       );
+
+  GetServerLatency(const GetServerLatency &other);
+  GetServerLatency &operator =(const GetServerLatency &other);
+  GetServerLatency(GetServerLatency &&other);
+  GetServerLatency &operator =(GetServerLatency &&other);
+
+  virtual ~GetServerLatency();
 
   /**
    * @brief 有効値を設定する。
@@ -110,14 +117,12 @@ public:
    * @return ReturnValuesを流すObservable
    */
   rx::observable<ReturnValues> operator ()(
-      const String &serverName,
+      String &&serverName,
       DWORD timeout = 0
       );
 
 private:
   ReturnValues values_;
-  String serverName_;
-  DWORD timeout_;
 };
 
 } // namespace notespp

@@ -13,6 +13,8 @@
 #pragma pack(pop)
 #endif
 
+//#include <QtDebug>
+
 namespace notespp {
 
 GetServerLatency::GetServerLatency(
@@ -21,9 +23,44 @@ GetServerLatency::GetServerLatency(
     bool enableServerToClient
     )
   : values_(enableVersion, enableClientToServer, enableServerToClient)
-  , serverName_()
-  , timeout_(0)
-{}
+{
+//  qDebug() << "Creating GetServerLatency[default]." << this;
+}
+
+GetServerLatency::GetServerLatency(const GetServerLatency &other)
+  : values_(other.values_)
+{
+//  qDebug() << "Creating GetServerLatency[copy].";
+}
+
+GetServerLatency &GetServerLatency::operator =(const GetServerLatency &other)
+{
+//  qDebug() << "Creating GetServerLatency[=]." << this;
+  if (this != &other) {
+    values_ = other.values_;
+  }
+  return *this;
+}
+
+GetServerLatency::GetServerLatency(GetServerLatency &&other)
+  : values_(std::move(other.values_))
+{
+//  qDebug() << "Creating GetServerLatency[move]." << this;
+}
+
+GetServerLatency &GetServerLatency::operator =(GetServerLatency &&other)
+{
+//  qDebug() << "Creating GetServerLatency[m=]." << this;
+  if (this != &other) {
+    values_ = std::move(other.values_);
+  }
+  return *this;
+}
+
+GetServerLatency::~GetServerLatency()
+{
+//  qDebug() << "Deleting GetServerLatency." << this;
+}
 
 void GetServerLatency::setValues(
     bool enableVersion,
@@ -35,15 +72,15 @@ void GetServerLatency::setValues(
 }
 
 rx::observable<GetServerLatency::ReturnValues> GetServerLatency::operator ()(
-    const String &serverName,
+    String &&serverName,
     DWORD timeout
     )
 {
-  serverName_ = serverName;
-  timeout_ = timeout;
+//  qDebug() << "Calling GetServerLatency::operator ()." << this;
   return rx::observable<>::create<GetServerLatency::ReturnValues>(
-        [this]
+        [this, serverName_ = std::move(serverName), timeout_ = timeout]
         (rx::subscriber<GetServerLatency::ReturnValues> o) {
+//    qDebug() << "Calling rx::observable<>::create<GetServerLatency::ReturnValues>." << this;
     try {
       Status status = NSFGetServerLatency(
             const_cast<char*>(serverName_.constData()),

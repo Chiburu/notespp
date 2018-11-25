@@ -26,14 +26,9 @@ public:
   /**
    * @brief コマンドの実行
    * @param options オプションデータマップ
-   * @return オブザーバブルなQVariantMap
+   * @return 戻り値データマップ
    */
-  virtual rx::observable<QVariantMap> exec(
-      const QVariantMap &options
-      ) = 0;
-
-protected:
-  QVariantMap options_;
+  virtual QVariantMap exec(QVariantMap &&options) = 0;
 };
 
 #endif // COMMAND_H

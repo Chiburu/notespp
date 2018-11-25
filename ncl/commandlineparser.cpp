@@ -25,48 +25,47 @@ void CommandLineParser::addOption(CmdOption *pOption)
   optionList_.append(pOption);
 }
 
-rx::observable<QVariantMap> CommandLineParser::parse(
-    const QCoreApplication &app
-    )
+ClData CommandLineParser::parse(const QCoreApplication &app)
 {
-  return rx::observable<>::create<ClData>(
-        [this, &app](rx::subscriber<ClData> o) {
-    try {
-      QCommandLineParser parser;
-      parser.addHelpOption();
-      parser.addVersionOption();
+  // コマンドラインパーサ(実体)を初期化する。
+  QCommandLineParser parser;
+  parser.addHelpOption();
+  parser.addVersionOption();
 
-      parser.addPositionalArgument("command", QObject::tr("Command"));
-      foreach (CmdOption *pOption, optionList_) {
-        parser.addOption(*pOption->ptr());
-      }
-      parser.process(app);
-      QVariantMap options;
-      foreach (CmdOption *pOption, optionList_) {
-        const QCommandLineOption *ptr = pOption->ptr();
-        if (parser.isSet(*ptr)) {
-          QString value = parser.value(*ptr);
-          options.insert(pOption->name(), value);
-        }
-      }
-      const QStringList args = parser.positionalArguments();
-      if (args.isEmpty())
-        throw QObject::tr("No Command.");
-      foreach (Command *pCmd, cmdList_) {
-        QString cmd = pCmd->name();
-        if (cmd == args.at(0)) {
-          o.on_next(std::make_tuple(pCmd, options));
-          o.on_completed();
-          return;
-        }
-      }
-      throw QObject::tr("Not found command.");
-    } catch (...) {
-      o.on_error(std::current_exception());
+  // コマンド引数を設定する。
+  parser.addPositionalArgument("command", QObject::tr("Command"));
+
+  // オプション引数を設定する。
+  foreach (CmdOption *pOption, optionList_) {
+    parser.addOption(*pOption->ptr());
+  }
+
+  // パースを実行する。
+  parser.process(app);
+
+  // オプション引数の指定値をマップにまとめる。
+  QVariantMap options;
+  foreach (CmdOption *pOption, optionList_) {
+    const QCommandLineOption *ptr = pOption->ptr();
+    if (parser.isSet(*ptr)) {
+      QString value = parser.value(*ptr);
+      options.insert(pOption->name(), value);
     }
-  }).flat_map([](ClData cldata) {
-    Command *pCmd = std::get<0>(cldata);
-    QVariantMap options = std::get<1>(cldata);
-    return pCmd->exec(options);
-  });
+  }
+
+  // コマンド引数が指定されているか確認する。
+  const QStringList args = parser.positionalArguments();
+  if (args.isEmpty())
+    throw QObject::tr("No Command.");
+
+  // 指定のコマンドが存在するか確認し、あればオプションデータとともに返す。
+  foreach (Command *pCmd, cmdList_) {
+    QString cmd = pCmd->name();
+    if (cmd == args.at(0)) {
+      return std::make_tuple(pCmd, options);
+    }
+  }
+
+  // 指定のコマンドが存在しなければ例外をスローする。
+  throw QObject::tr("Not found command.");
 }

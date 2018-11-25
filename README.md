@@ -3,6 +3,10 @@ Notes C APIのC++/Qtによるラッピングライブラリと改訂版Notes Com
 
 # History
 
+## v0.0.6.1 - 2018-11-25
+
+* ReactiveXで使用しているラムダ式のキャプチャ変数が、ネストが深くなると生存期間などの問題が解決しづらくなるため、GetServerLatency以外でのObservable仕様を控えるようにする。
+
 ## v0.0.6 - 2018-11-24
 
 * コマンドラインの処理にReactiveXを導入します。

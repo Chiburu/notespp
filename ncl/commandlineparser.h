@@ -13,7 +13,7 @@ class QCoreApplication;
 class Command;
 class CmdOption;
 
-typedef std::tuple<Command*,QVariantMap> ClData;
+using ClData = std::tuple<Command*,QVariantMap>;
 
 /**
  * @brief コマンドラインパーサ
@@ -45,11 +45,11 @@ public:
   void addOption(CmdOption *pOption);
 
   /**
-   * @brief コマンドラインをパースして、コマンドを実行し、結果を返す。
+   * @brief コマンドラインをパースして、実行するコマンドとパラメータを返す。
    * @param app アプリケーション
-   * @return コマンドの実行結果
+   * @return コマンドとパラメータ
    */
-  rx::observable<QVariantMap> parse(const QCoreApplication &app);
+  ClData parse(const QCoreApplication &app);
 
 private:
   QList<Command*> cmdList_;

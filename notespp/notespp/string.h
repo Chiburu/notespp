@@ -26,6 +26,12 @@ public:
    */
   String(const char *pData, int size = -1);
 
+  String(const String &other);
+  String &operator=(const String &other);
+  String(String &&other);
+  String &operator=(String &&other);
+  virtual ~String();
+
   /**
    * @brief QStringに変換する。
    * @return 変換したQString
