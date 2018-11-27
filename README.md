@@ -3,9 +3,15 @@ Notes C APIのC++/Qtによるラッピングライブラリと改訂版Notes Com
 
 # History
 
+## v0.0.6.2 - 2018-11-26
+
+* `Status`クラスを`std::exception`からの継承ではなく独立したクラスとする。
+
+* `GetServerLatency`クラスの`operator()`の引数`serverName`を右辺値参照とする。
+
 ## v0.0.6.1 - 2018-11-25
 
-* ReactiveXで使用しているラムダ式のキャプチャ変数が、ネストが深くなると生存期間などの問題が解決しづらくなるため、GetServerLatency以外でのObservable仕様を控えるようにする。
+* ReactiveXで使用しているラムダ式のキャプチャ変数が、ネストが深くなると生存期間などの問題が解決しづらくなるため、`GetServerLatency`以外でのObservable仕様を控えるようにする。
 
 ## v0.0.6 - 2018-11-24
 
@@ -17,7 +23,7 @@ Notes C APIのC++/Qtによるラッピングライブラリと改訂版Notes Com
 
 * コマンドラインを処理するクラスを追加します。
 
-* GetServerLatencyをコマンドライン化します。
+* `GetServerLatency`をコマンドライン化します。
 
 ## v0.0.4 - 2018-11-17
 
@@ -26,24 +32,24 @@ Notes C APIのC++/Qtによるラッピングライブラリと改訂版Notes Com
 
 ## v0.0.3 - 2018-11-15
 
-* LMBCS文字列を扱うクラス String を追加します。
-* LMBCS文字列とQStringを相互に変換する機能を追加します。
+* LMBCS文字列を扱うクラス`String`を追加します。
+* LMBCS文字列と`QString`を相互に変換する機能を追加します。
 
 
 ## v0.0.2 - 2018-11-14
 
 * Notes C API関数を別のライブラリとして構築します。
-  * Statusクラス
+  * `Status`クラス
 
     例外クラスとしても利用できます。
 
-  * Mainクラス
+  * `Main`クラス
 
     Notes C APIの初期化、終了処理を自動化します。
 
-  * GetServerLatency関数オブジェクト
+  * `GetServerLatency`関数オブジェクト
 
-    NSFGetServerLatency関数をラッピングします。
+    `NSFGetServerLatency`関数をラッピングします。
 
 * rxcpp(Reactive ExtensionsのCPPライブラリ)を導入します。
 

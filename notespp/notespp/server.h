@@ -42,41 +42,19 @@ public:
   };
 
   /**
-   * @brief 出力用データクラス
-   * @class ReturnValues
+   * @brief 出力用データ構造体
+   * @struct ReturnValues
    */
-  class ReturnValues
+  struct ReturnValues
   {
-  public:
-    ReturnValues(
-        bool enableVersion,
-        bool enableClientToServer,
-        bool enableServerToClient
-        )
-      : version_(0, enableVersion),
-        clientToServer_(0, enableClientToServer),
-        serverToClient_(0, enableServerToClient)
-    {}
-
-    void setValues(
-        bool enableVersion,
-        bool enableClientToServer,
-        bool enableServerToClient
-        )
-    {
-      version_ = Value<WORD>(0, enableVersion);
-      clientToServer_ = Value<DWORD>(0, enableClientToServer);
-      serverToClient_ = Value<DWORD>(0, enableServerToClient);
-    }
-
-    Value<WORD> &version() { return version_; }
-    Value<DWORD> &clientToServer() { return clientToServer_; }
-    Value<DWORD> &serverToClient() { return serverToClient_; }
-
-  private:
     Value<WORD> version_;
     Value<DWORD> clientToServer_;
     Value<DWORD> serverToClient_;
+    ReturnValues(bool bVersion, bool bC2S, bool bS2C)
+      : version_(0, bVersion),
+        clientToServer_(0, bC2S),
+        serverToClient_(0, bS2C)
+    {}
   };
 
   /**
@@ -86,25 +64,6 @@ public:
    * @param enableServerToClient サーバtoクライアントを有効にする
    */
   GetServerLatency(
-      bool enableVersion = true,
-      bool enableClientToServer = true,
-      bool enableServerToClient = true
-      );
-
-  GetServerLatency(const GetServerLatency &other);
-  GetServerLatency &operator =(const GetServerLatency &other);
-  GetServerLatency(GetServerLatency &&other);
-  GetServerLatency &operator =(GetServerLatency &&other);
-
-  virtual ~GetServerLatency();
-
-  /**
-   * @brief 有効値を設定する。
-   * @param enableVersion バージョン値取得の有無
-   * @param enableClientToServer クライアントtoサーバ待ち時間取得の有無
-   * @param enableServerToClient サーバtoクライアント待ち時間取得の有無
-   */
-  void setValues(
       bool enableVersion = true,
       bool enableClientToServer = true,
       bool enableServerToClient = true

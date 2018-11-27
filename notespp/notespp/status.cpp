@@ -1,10 +1,12 @@
 ﻿#include "notespp/status.h"
+#include "notespp/string.h"
 
 #if defined(NT)
 #pragma pack(push, 1)
 #endif
 
 #include <osmisc.h>
+#include <misc.h>
 
 #if defined(NT)
 #pragma pack(pop)
@@ -13,35 +15,8 @@
 namespace notespp {
 
 Status::Status(STATUS status)
-  : std::exception()
-  , value_(status)
-  , msg_(new char[MAX_MESSAGE_SIZE])
+  : value_(status)
 {}
-
-Status::~Status()
-{}
-
-Status::Status(const Status &other)
-  : std::exception(other)
-  , value_(other.value_)
-  , msg_(new char[MAX_MESSAGE_SIZE])
-{}
-
-Status &Status::operator=(const Status &other)
-{
-  if (this != &other)
-  {
-    std::exception::operator =(other);
-    value_ = other.value_;
-  }
-  return *this;
-}
-
-Status &Status::operator=(STATUS status)
-{
-  value_ = status;
-  return *this;
-}
 
 STATUS Status::error() const
 {
@@ -63,16 +38,22 @@ bool Status::isRemote() const
   return ((STS_REMOTE & error()) != 0);
 }
 
-const char *Status::what() const
+String Status::message() const
 {
+  CharArrayPtr buffer(new char[MAXSPRINTF]);
   WORD len = OSLoadString(
         NULLHANDLE,
         error(),
-        msg_.data(),
-        MAX_MESSAGE_SIZE
+        buffer.data(),
+        MAXSPRINTF
         );
-  msg_.data()[len] = '\0';
-  return msg_.data();
+  return String(buffer.data(), static_cast<int>(len));
+}
+
+Status &Status::operator=(STATUS status)
+{
+  value_ = status;
+  return *this;
 }
 
 } // namespace notespp

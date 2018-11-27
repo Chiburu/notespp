@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
   catch (nx::Status status) {
     // ステータス型例外
     QJsonObject data {
-      { "error", nx::String(status.what()).toQString() }
+      { "error", status.message().toQString() }
     };
     json.setObject(data);
     cerr << json.toJson(QJsonDocument::Compact) << endl;

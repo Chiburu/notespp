@@ -5,31 +5,16 @@
 
 namespace notespp {
 
+class String;
+
 class NOTESPPSHARED_EXPORT Status
-    : public std::exception
 {
 public:
-  /**
-   * @brief 文字列に変換する際のバッファサイズです。
-   */
-  static const size_t MAX_MESSAGE_SIZE = 256;
-
   /**
    * @brief コンストラクタ
    * @param status ステータス値
    */
   Status(STATUS status = NOERROR);
-
-  /**
-   * @brief コピーコンストラクタ
-   * @param other コピー元オブジェクト
-   */
-  Status(const Status &other);
-
-  /**
-   * @brief デストラクタ
-   */
-  virtual ~Status();
 
   /**
    * @brief フラグを除去した純粋なエラー値です。
@@ -56,17 +41,10 @@ public:
   bool isRemote() const;
 
   /**
-   * @brief ステータス値からエラーメッセージ文字列を取得します。
-   * @return エラーメッセージ文字列へのポインタ
+   * @brief エラーメッセージ文字列を返す。
+   * @return エラーメッセージ文字列
    */
-  virtual const char *what() const;
-
-  /**
-   * @brief 代入演算子
-   * @param other 代入元オブジェクト
-   * @return 代入後のオブジェクト
-   */
-  Status &operator=(const Status &other);
+  String message() const;
 
   /**
    * @brief STATUS値からの代入演算子
@@ -77,7 +55,6 @@ public:
 
 private:
   STATUS value_;
-  mutable CharArrayPtr msg_;
 };
 
 } // namespace notespp

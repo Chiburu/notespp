@@ -26,10 +26,21 @@ public:
    */
   String(const char *pData, int size = -1);
 
+  /**
+   * @brief コピーコンストラクタ
+   * @param other コピー元オブジェクト
+   */
   String(const String &other);
-  String &operator=(const String &other);
+
+  /**
+   * @brief 移動コンストラクタ
+   * @param other 移動元
+   */
   String(String &&other);
-  String &operator=(String &&other);
+
+  /**
+   * @brief デストラクタ
+   */
   virtual ~String();
 
   /**
@@ -49,6 +60,20 @@ public:
    * @return バイナリデータへのポインタ
    */
   const char *constData() const;
+
+  /**
+   * @brief 代入演算子
+   * @param other 代入元オブジェクト
+   * @return 自身への参照
+   */
+  String &operator=(const String &other);
+
+  /**
+   * @brief 移動演算子
+   * @param other 移動元オブジェクト
+   * @return 自身への参照
+   */
+  String &operator=(String &&other);
 
   /**
    * @brief QStringからString文字列を作成する。

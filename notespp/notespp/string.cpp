@@ -13,55 +13,28 @@
 #pragma pack(pop)
 #endif
 
-//#include <QtDebug>
-
 namespace notespp {
 
 String::String()
   : bytes_()
-{
-//  qDebug() << "Creating String[default]. len=" << bytes_.size();
-}
+{}
 
 String::String(const char *pData, int size)
   : bytes_(pData, size)
-{
-//  qDebug() << "Creating String[bytes]. len=" << bytes_.size();
-}
+{}
 
 String::String(const String &other)
 {
-//  qDebug() << "Creating String[copy]. len=" << other.bytes_.size();
   bytes_ = other.bytes_;
-}
-
-String &String::operator=(const String &other)
-{
-//  qDebug() << "Creating String[=]. len=" << other.bytes_.size();
-  if (this != &other) {
-    bytes_ = other.bytes_;
-  }
-  return *this;
 }
 
 String::String(String &&other)
 {
-//  qDebug() << "Creating String[move]. len=" << other.bytes_.size();
   bytes_ = std::move(other.bytes_);
-}
-
-String &String::operator=(String &&other)
-{
-//  qDebug() << "Creating String[m=]. len=" << other.bytes_.size();
-  if (this != &other) {
-    bytes_ = std::move(other.bytes_);
-  }
-  return *this;
 }
 
 String::~String()
 {
-//  qDebug() << "Deleting String. len=" << bytes_.size();
 }
 
 QString String::toQString() const
@@ -101,6 +74,22 @@ int String::charSize() const
 const char *String::constData() const
 {
   return bytes_.constData();
+}
+
+String &String::operator=(const String &other)
+{
+  if (this != &other) {
+    bytes_ = other.bytes_;
+  }
+  return *this;
+}
+
+String &String::operator=(String &&other)
+{
+  if (this != &other) {
+    bytes_ = std::move(other.bytes_);
+  }
+  return *this;
 }
 
 String String::fromQString(const QString &qstr)

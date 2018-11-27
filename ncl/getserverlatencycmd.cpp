@@ -44,20 +44,20 @@ QVariantMap GetServerLatencyCmd::exec(QVariantMap &&options)
         nx::String::fromQString(server), timeout).subscribe(
         [&retValues](nx::GetServerLatency::ReturnValues values)
   {
-    if (values.version().enabled())
+    if (values.version_.enabled())
       retValues.insert(
             "version",
-            static_cast<uint>(values.version().value())
+            static_cast<uint>(values.version_.value())
             );
-    if (values.clientToServer().enabled())
+    if (values.clientToServer_.enabled())
       retValues.insert(
             "clientToServer",
-            static_cast<uint>(values.clientToServer().value())
+            static_cast<uint>(values.clientToServer_.value())
             );
-    if (values.serverToClient().enabled())
+    if (values.serverToClient_.enabled())
       retValues.insert(
             "serverToClient",
-            static_cast<uint>(values.serverToClient().value())
+            static_cast<uint>(values.serverToClient_.value())
             );
   },
   [&ep](std::exception_ptr exp) { ep = exp; }
